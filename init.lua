@@ -199,6 +199,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<leader>T', [[<cmd>split | term<cr>i]], { desc = 'Open new terminal window' })
+vim.keymap.set('n', '<leader>N', [[<cmd>tabnew<cr>]], { desc = 'Open a new tab' })
+vim.keymap.set('n', '<leader>Q', [[<cmd>tabclose<cr>]], { desc = 'Close current tab' })
 -- vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
