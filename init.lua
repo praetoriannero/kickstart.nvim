@@ -204,7 +204,16 @@ vim.keymap.set('n', '<leader>T', [[<cmd>vsplit | term<cr>i]], { desc = 'Open new
 vim.keymap.set('n', '<leader>N', [[<cmd>tabnew<cr>]], { desc = 'Open a new tab' })
 vim.keymap.set('n', '<leader>Q', [[<cmd>tabclose<cr>]], { desc = 'Close current tab' })
 vim.keymap.set('n', '<C-b>', [[<cmd>NvimTreeToggle<cr>]], { desc = 'Toggle file tree' })
+vim.keymap.set('n', '<C-q>', '<C-V>')
 -- user-keymap-end
+
+-- user-custom-start-commands-begin
+vim.api.nvim_create_autocmd({ 'VimEnter' }, {
+  callback = function()
+    require('nvim-tree.api').tree.open()
+  end,
+})
+-- user-custom-start-commands-end
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
