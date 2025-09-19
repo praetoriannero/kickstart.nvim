@@ -206,13 +206,20 @@ vim.keymap.set('n', '<leader>Q', [[<cmd>tabclose<cr>]], { desc = 'Close current 
 vim.keymap.set('n', '<C-b>', [[<cmd>NvimTreeToggle<cr>]], { desc = 'Toggle file tree' })
 -- vim.keymap.set('n', '<C-q>', '<C-V>')
 -- user-keymap-end
-
--- user-custom-start-commands-begin
-vim.api.nvim_create_autocmd({ 'VimEnter' }, {
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'nix',
   callback = function()
-    require('nvim-tree.api').tree.open()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
   end,
 })
+-- user-custom-start-commands-begin
+-- vim.api.nvim_create_autocmd({ 'VimEnter' }, {
+--   callback = function()
+--     require('nvim-tree.api').tree.open()
+--   end,
+-- })
 -- user-custom-start-commands-end
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
@@ -288,7 +295,8 @@ require('lazy').setup({
   },
   -- stop-user-added
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  -- 'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  config = true,
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -323,6 +331,10 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
+  },
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false,
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -473,6 +485,11 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        pickers = {
+          -- find_files = {
+          --   hidden = true,
+          -- },
+        },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
@@ -742,8 +759,8 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -1023,7 +1040,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      -- indent = { enable = true, disable = { 'ruby' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
