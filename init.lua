@@ -335,6 +335,15 @@ require('lazy').setup({
   {
     'xiyaowong/transparent.nvim',
     lazy = false,
+    config = function()
+      require('transparent').setup {
+        extra_groups = {
+          'NvimTreeNormal',
+          'NvimTreeNormalNC',
+          'NvimTreeEndOfBuffer',
+        },
+      }
+    end,
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
