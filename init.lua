@@ -215,6 +215,8 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 vim.opt.fillchars = { eob = ' ' }
+vim.opt.whichwrap:append '<,>,h,l'
+
 -- user-custom-start-commands-begin
 -- vim.api.nvim_create_autocmd({ 'VimEnter' }, {
 --   callback = function()
