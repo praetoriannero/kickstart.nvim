@@ -99,7 +99,10 @@ vim.g.have_nerd_font = false
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
-vim.o.number = true
+-- vim.o.number = true
+vim.opt.nu = true
+vim.opt.relativenumber = true
+vim.o.statuscolumn = '%s %l %r '
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.o.relativenumber = true
@@ -200,12 +203,27 @@ vim.keymap.set('n', '<M-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<M-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- user-keymap-start
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = '*',
+  callback = function()
+    vim.opt_local.indentexpr = ''
+  end,
+})
 vim.keymap.set('n', '<leader>T', [[<cmd>vsplit | term<cr>i]], { desc = 'Open new terminal window' })
 vim.keymap.set('n', '<leader>N', [[<cmd>tabnew<cr>]], { desc = 'Open a new tab' })
 vim.keymap.set('n', '<leader>Q', [[<cmd>tabclose<cr>]], { desc = 'Close current tab' })
 vim.keymap.set('n', '<C-b>', [[<cmd>NvimTreeToggle<cr>]], { desc = 'Toggle file tree' })
 -- vim.keymap.set('n', '<C-q>', '<C-V>')
 -- user-keymap-end
+
+-- Normal mode
+vim.keymap.set('n', '<C-Left>', 'B', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-Right>', 'W', { noremap = true, silent = true })
+
+-- Insert mode (use <C-o> to run motions without leaving insert mode)
+vim.keymap.set('i', '<C-Left>', '<C-o>B', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-Right>', '<C-o>W', { noremap = true, silent = true })
+
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'nix',
   callback = function()
@@ -215,6 +233,8 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 vim.opt.fillchars = { eob = ' ' }
+vim.o.autoindent = true
+vim.o.smartindent = true
 -- user-custom-start-commands-begin
 -- vim.api.nvim_create_autocmd({ 'VimEnter' }, {
 --   callback = function()
@@ -294,10 +314,27 @@ require('lazy').setup({
       -- log_level = 'debug',
     },
   },
+  -- {
+  --   'smoka7/multicursors.nvim',
+  --   event = 'VeryLazy',
+  --   dependencies = {
+  --     'nvimtools/hydra.nvim',
+  --   },
+  --   opts = {},
+  --   cmd = { 'MCstart', 'MCvisual', 'MCclear', 'MCpattern', 'MCvisualPattern', 'MCunderCursor' },
+  --   keys = {
+  --     {
+  --       mode = { 'v', 'n' },
+  --       '<Leader>m',
+  --       '<cmd>MCstart<cr>',
+  --       desc = 'Create a selection for selected text or word under the cursor',
+  --     },
+  --   },
+  -- },
   -- stop-user-added
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-  config = true,
+  -- 'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  -- config = true,
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -769,7 +806,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- pyright = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -1039,6 +1076,7 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+  -- start
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -1064,6 +1102,7 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  -- end
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
