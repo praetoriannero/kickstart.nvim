@@ -19,9 +19,9 @@
 ========                                                     ========
 =====================================================================
 =====================================================================
-
+ 
 What is Kickstart?
-
+ 
   Kickstart.nvim is *not* a distribution.
 
   Kickstart.nvim is a starting point for your own configuration.
@@ -75,12 +75,12 @@ Kickstart Guide:
     Throughout the file. These are for you, the reader, to help you understand what is happening.
     Feel free to delete them once you know what you're doing, but they should serve as a guide
     for when you are first encountering a few different constructs in your Neovim config.
-
+  
 If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
+  
 I hope you enjoy your Neovim journey,
 - TJ
-
+  
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
@@ -235,13 +235,14 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.opt.fillchars = { eob = " " }
 vim.o.autoindent = true
 vim.o.smartindent = true
--- user-custom-start-commands-begin
--- vim.api.nvim_create_autocmd({ 'VimEnter' }, {
---   callback = function()
---     require('nvim-tree.api').tree.open()
---   end,
--- })
--- user-custom-start-commands-end
+
+vim.api.nvim_create_user_command("Config", function()
+	local config_path = vim.fn.stdpath("config") .. "/init.lua"
+	vim.cmd("edit " .. config_path)
+end, {})
+
+vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
+vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -313,6 +314,34 @@ require("lazy").setup({
 			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
 			-- log_level = 'debug',
 		},
+	},
+	{
+		"kylechui/nvim-surround",
+		version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+				keymaps = {
+					insert = "<C-g>s",
+					insert_line = "<C-g>S",
+					normal = "ms",
+					normal_cur = "mss",
+					normal_line = "mS",
+					normal_cur_line = "mSS",
+					visual = "S",
+					visual_line = "gS",
+					delete = "md",
+					change = "mc",
+					change_line = "cS",
+				},
+			})
+		end,
+	},
+	{},
+	{
+		"ggandor/leap.nvim",
+		branch = "main",
 	},
 	-- {
 	--   'smoka7/multicursors.nvim',
