@@ -343,23 +343,6 @@ require("lazy").setup({
 		"ggandor/leap.nvim",
 		branch = "main",
 	},
-	-- {
-	--   'smoka7/multicursors.nvim',
-	--   event = 'VeryLazy',
-	--   dependencies = {
-	--     'nvimtools/hydra.nvim',
-	--   },
-	--   opts = {},
-	--   cmd = { 'MCstart', 'MCvisual', 'MCclear', 'MCpattern', 'MCvisualPattern', 'MCunderCursor' },
-	--   keys = {
-	--     {
-	--       mode = { 'v', 'n' },
-	--       '<Leader>m',
-	--       '<cmd>MCstart<cr>',
-	--       desc = 'Create a selection for selected text or word under the cursor',
-	--     },
-	--   },
-	-- },
 	-- stop-user-added
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	-- 'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
@@ -580,6 +563,9 @@ require("lazy").setup({
 						require("telescope.themes").get_dropdown(),
 					},
 				},
+			})
+			require("telescope.builtin").git_files({
+				show_untracked = true,
 			})
 
 			-- Enable Telescope extensions if they are installed
