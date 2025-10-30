@@ -212,17 +212,22 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set("n", "<leader>T", [[<cmd>vsplit | term<cr>i]], { desc = "Open new terminal window" })
 vim.keymap.set("n", "<leader>N", [[<cmd>tabnew<cr>]], { desc = "Open a new tab" })
 vim.keymap.set("n", "<leader>Q", [[<cmd>tabclose<cr>]], { desc = "Close current tab" })
-vim.keymap.set("n", "<C-b>", [[<cmd>NvimTreeToggle<cr>]], { desc = "Toggle file tree" })
+vim.keymap.set("n", "<C-b>", [[<cmd>Telescope git_files<cr>]], { desc = "Open git ls-files" })
+-- vim.keymap.set('n', '<C-b>', [[<cmd>NvimTreeToggle<cr>]], { desc = 'Toggle file tree' })
 -- vim.keymap.set('n', '<C-q>', '<C-V>')
 -- user-keymap-end
 
 -- Normal mode
-vim.keymap.set("n", "<C-Left>", "B", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-Right>", "W", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-Left>", "b", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-Right>", "w", { noremap = true, silent = true })
 
 -- Insert mode (use <C-o> to run motions without leaving insert mode)
-vim.keymap.set("i", "<C-Left>", "<C-o>B", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-Right>", "<C-o>W", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-Left>", "<C-o>b", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-Right>", "<C-o>w", { noremap = true, silent = true })
+vim.keymap.set("i", "<Find>", "<C-o>^")
+vim.keymap.set("i", "<Select>", "<C-o>$")
+vim.keymap.set("n", "<Find>", "^")
+vim.keymap.set("n", "<Select>", "$")
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "nix",
@@ -292,17 +297,17 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- start-user-added
-	{
-		"nvim-tree/nvim-tree.lua",
-		version = "*",
-		lazy = false,
-		dependencies = {
-			"nvim-tree/nvim-web-devicons",
-		},
-		config = function()
-			require("nvim-tree").setup({})
-		end,
-	},
+	-- {
+	--   'nvim-tree/nvim-tree.lua',
+	--   version = '*',
+	--   lazy = false,
+	--   dependencies = {
+	--     'nvim-tree/nvim-web-devicons',
+	--   },
+	--   config = function()
+	--     require('nvim-tree').setup {}
+	--   end,
+	-- },
 	{
 		"rmagatti/auto-session",
 		lazy = false,
@@ -314,6 +319,13 @@ require("lazy").setup({
 			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
 			-- log_level = 'debug',
 		},
+	},
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+		-- use opts = {} for passing setup options
+		-- this is equivalent to setup({}) function
 	},
 	{
 		"kylechui/nvim-surround",
@@ -387,11 +399,11 @@ require("lazy").setup({
 		lazy = false,
 		config = function()
 			require("transparent").setup({
-				extra_groups = {
-					"NvimTreeNormal",
-					"NvimTreeNormalNC",
-					"NvimTreeEndOfBuffer",
-				},
+				-- extra_groups = {
+				--   'NvimTreeNormal',
+				--   'NvimTreeNormalNC',
+				--   'NvimTreeEndOfBuffer',
+				-- },
 			})
 		end,
 	},
@@ -459,6 +471,7 @@ require("lazy").setup({
 				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>t", group = "[T]oggle" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+				{ "m", group = "[M]atch" },
 			},
 		},
 	},
@@ -483,7 +496,7 @@ require("lazy").setup({
 		},
 		init = function()
 			vim.g.coq_settings = {
-				auto_start = true, -- if you want to start COQ at startup
+				auto_start = false, -- if you want to start COQ at startup
 				-- Your COQ settings here
 			}
 		end,
@@ -544,11 +557,11 @@ require("lazy").setup({
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
 			require("telescope").setup({
-				pickers = {
-					-- find_files = {
-					--   hidden = true,
-					-- },
-				},
+				-- pickers = {
+				-- find_files = {
+				--   hidden = true,
+				-- },
+				-- },
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
@@ -564,9 +577,9 @@ require("lazy").setup({
 					},
 				},
 			})
-			require("telescope.builtin").git_files({
-				show_untracked = true,
-			})
+			-- require('telescope.builtin').git_files {
+			--   show_untracked = true,
+			-- }
 
 			-- Enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
@@ -975,6 +988,7 @@ require("lazy").setup({
 		--- @type blink.cmp.Config
 		opts = {
 			keymap = {
+				["<S-Tab>"] = { "accept" },
 				-- 'default' (recommended) for mappings similar to built-in completions
 				--   <c-y> to accept ([y]es) the completion.
 				--    This will auto-import if your LSP supports it.
@@ -997,8 +1011,6 @@ require("lazy").setup({
 				--
 				-- See :h blink-cmp-config-keymap for defining your own keymap
 				preset = "default",
-				["<Tab>"] = { "snippet_forward", "fallback" },
-				["<S-Tab>"] = { "snippet_backward", "fallback" },
 				-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
 				--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
 			},
@@ -1013,11 +1025,14 @@ require("lazy").setup({
 				-- By default, you may press `<c-space>` to show the documentation.
 				-- Optionally, set `auto_show = true` to show the documentation after a delay.
 				documentation = { auto_show = false, auto_show_delay_ms = 500 },
-				range = "full",
+				-- range = 'full',
+				menu = { auto_show = false },
+				ghost_text = { enabled = true },
 			},
 
 			sources = {
-				default = { "lsp", "path", "snippets", "lazydev" },
+				-- default = { 'lsp', 'path', 'snippets', 'lazydev' },
+				default = { "lsp", "buffer" },
 				providers = {
 					lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
 				},
