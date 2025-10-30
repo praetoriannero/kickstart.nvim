@@ -246,6 +246,7 @@ vim.api.nvim_create_user_command("Config", function()
 	vim.cmd("edit " .. config_path)
 end, {})
 
+vim.keymap.set("n", "U", "<C-r>", { noremap = true })
 vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
 vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
 
