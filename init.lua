@@ -351,7 +351,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-	{},
 	{
 		"ggandor/leap.nvim",
 		branch = "main",
@@ -466,7 +465,12 @@ require("lazy").setup({
 					F12 = "<F12>",
 				},
 			},
-
+			preset = "helix",
+			triggers = {
+				{ "<auto>", mode = "nixsotc" },
+				{ "m", mode = "n" },
+				{ "s", mode = { "n", "v" } },
+			},
 			-- Document existing key chains
 			spec = {
 				{ "<leader>s", group = "[S]earch" },
@@ -1108,7 +1112,7 @@ require("lazy").setup({
 			-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
-			require("mini.surround").setup()
+			-- require("mini.surround").setup()
 
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
@@ -1219,5 +1223,16 @@ require("lazy").setup({
 	},
 })
 
+local wk = require("which-key")
+-- wk.setup({
+-- 	present = "helix",
+-- })
+wk.add({
+	{ "m", group = "+surround" },
+	{ "md", desc = "Surround delete" },
+}, { mode = "n" })
+wk.add({
+	{ "s", group = "+leap" },
+}, { mode = "n" })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
