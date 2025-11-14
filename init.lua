@@ -213,8 +213,20 @@ vim.keymap.set("n", "<leader>T", [[<cmd>vsplit | term<cr>i]], { desc = "Open new
 vim.keymap.set("n", "<leader>N", [[<cmd>tabnew<cr>]], { desc = "Open a new tab" })
 vim.keymap.set("n", "<leader>Q", [[<cmd>tabclose<cr>]], { desc = "Close current tab" })
 vim.keymap.set("n", "<C-b>", [[<cmd>Telescope git_files<cr>]], { desc = "Open git ls-files" })
--- vim.keymap.set('n', '<C-b>', [[<cmd>NvimTreeToggle<cr>]], { desc = 'Toggle file tree' })
--- vim.keymap.set('n', '<C-q>', '<C-V>')
+
+vim.keymap.set("n", "<A-down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+vim.keymap.set("n", "<A-up>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+vim.keymap.set("i", "<A-down>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+vim.keymap.set("i", "<A-up>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+vim.keymap.set("v", "<A-down>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+vim.keymap.set("v", "<A-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+
+vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 -- user-keymap-end
 
 -- Normal mode
@@ -249,7 +261,7 @@ end, {})
 vim.keymap.set("n", "U", "<C-r>", { noremap = true })
 vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
 vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
-
+vim.keymap.set("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Open diagnostic" })
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -1230,9 +1242,6 @@ local wk = require("which-key")
 wk.add({
 	{ "m", group = "+surround" },
 	{ "md", desc = "Surround delete" },
-}, { mode = "n" })
-wk.add({
-	{ "s", group = "+leap" },
 }, { mode = "n" })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
